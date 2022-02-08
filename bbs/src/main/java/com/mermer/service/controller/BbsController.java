@@ -2,6 +2,7 @@ package com.mermer.service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +54,15 @@ public class BbsController {
 	public ResponseEntity updateBbs(@PathVariable Long id, @RequestBody BbsDto bbs) {
 
 		ResponseEntity responseEntity = bbsService.updateBbs(id, bbs);
+
+		return responseEntity;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@DeleteMapping("/{id}")
+	public ResponseEntity deleteBbs(@PathVariable Long id) {
+
+		ResponseEntity responseEntity = bbsService.deleteBbs(id);
 
 		return responseEntity;
 	}

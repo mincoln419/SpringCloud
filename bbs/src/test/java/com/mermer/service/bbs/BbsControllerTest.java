@@ -152,4 +152,30 @@ public class BbsControllerTest {
 		.andExpect(jsonPath("title").value(title + "modified"));
 	}
 	
+	
+	@Test
+	@DisplayName("bbs 삭제 mvc 테스트")
+	public void deleteBbs_success() throws Exception {
+		
+		
+		String title = "test title";
+		String content = "test content";
+		Bbs bbs = Bbs.builder()
+				.title(title)
+				.content(content)
+				.insterId(123)
+				.instDtm(LocalDateTime.of(2022,2, 7, 13, 14, 15))
+				.readCnt(2)
+				.build();
+		
+		bbsRepository.save(bbs);
+		
+		
+		mockMvc.perform(delete("/api/bbs/{id}", bbs.getId())
+				)
+		.andDo(print())
+		.andExpect(status().isOk());
+		
+	}
+	
 }
