@@ -137,6 +137,7 @@ public class BbsControllerTest {
 		
 		BbsDto bbsUpdate = BbsDto.builder()
 				.title(title + "modified")
+				.content(content)
 				.insterId(123)
 				.build();
 		
