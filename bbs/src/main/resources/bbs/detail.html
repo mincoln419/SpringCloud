@@ -14,6 +14,10 @@
   <div class="container">
     <h2>상세</h2>
     <form>
+      <div>
+        <input id = 'bbsId' hidden=true>
+
+      </div>
       <div class="form-group">
         <label for="title">제목</label>
         <!-- placeholder 속성 입력한 데이터가 없는 경우 배경으로 나타난다.실제적으로 입력을 100자까지로 지정 -->
@@ -30,7 +34,7 @@
       </div>
       <div class="form-group">
         <label for="writer">작성자</label>
-        <input type="text" class="form-control" id="writer" readonly = true name="writer">
+        <input type="text" class="form-control" id="writer" readonly=true name="writer">
       </div>
       <button id="register" type="button" class="btn btn-default">등록</button>
       <button id="update" type="button" class="btn btn-default">수정</button>
@@ -46,59 +50,68 @@
     var id = href.replace(/.+(detail\/)/, '');
     // 기존테이블 데이터 지우고 행을 추가해야한다면 아래 empty() 추가
     $.ajax({
-      url: 'http://192.168.0.2:8080/api/bbs/'+ id,
+      url: 'http://192.168.0.2:8080/api/bbs/' + id,
       method: 'GET',
       success: function (data) {
         console.log(data);
         $("#titleText").val(data.title);
-        $("#content").append(data.content);
+        $("#content").val(data.content);
         $("#writer").val(data.insterId);
-        
+        $("#bbsId").val(data.id);
+
       }
     });
   });
 
   $('#register').on("click", function () {
-    var formData = new FormData(); 
-    formData.append('title', $("#titleText").data);
-    formData.append('content', $("#content").data);
-    formData.append('insterId', $("#writer").data);
+    var formSerializeArray = $('form').serializeArray();
+    var object = {};
+    for (var i = 0; i < formSerializeArray.length; i++) {
+      object[formSerializeArray[i]['name']] = formSerializeArray[i]['value'];
+    }
 
     $.ajax({
-      url: 'http://192.168.0.2:8080/api/bbs/',
-      data: formData,
+      url: 'http://192.168.0.2:8080/api/bbs',
+      data: JSON.stringify(object),
       method: 'POST',
+      contentType: "application/json; charset=utf-8",
       success: function (data) {
         console.log(data);
-        
+
       }
     });
   });
 
   $('#update').on("click", function () {
+
+
+    var formSerializeArray = $('form').serializeArray();
+    var object = {};
+    for (var i = 0; i < formSerializeArray.length; i++) {
+      object[formSerializeArray[i]['name']] = formSerializeArray[i]['value'];
+    }
+    var id = $('#bbsId').val();
     $.ajax({
-      url: 'http://192.168.0.2:8080/api/bbs/'+ id,
+      url: 'http://192.168.0.2:8080/api/bbs/' + id,
+      data: JSON.stringify(object),
       method: 'PUT',
       success: function (data) {
         console.log(data);
-        $("#titleText").val(data.title);
-        $("#content").append(data.content);
-        $("#writer").val(data.insterId);
-        
+
       }
     });
   });
 
   $('#delete').on("click", function () {
     $.ajax({
-      url: 'http://192.168.0.2:8080/api/bbs/'+ id,
-      method: 'Delete',
+      url: 'http://192.168.0.2:8080/api/bbs/' + id,
+      method: 'DELETE',
       success: function (data) {
         console.log(data);
         $("#titleText").val(data.title);
         $("#content").append(data.content);
         $("#writer").val(data.insterId);
-        
+
       }
     });
   });
