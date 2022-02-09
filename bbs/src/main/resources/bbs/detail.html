@@ -15,7 +15,7 @@
     <h2>상세</h2>
     <form>
       <div>
-        <input id = 'bbsId' hidden=true>
+        <input id='bbsId' hidden=true>
 
       </div>
       <div class="form-group">
@@ -34,7 +34,7 @@
       </div>
       <div class="form-group">
         <label for="writer">작성자</label>
-        <input type="text" class="form-control" id="writer" readonly=true name="writer">
+        <input type="text" class="form-control" id="writer" readonly=true name="insterId">
       </div>
       <button id="register" type="button" class="btn btn-default">등록</button>
       <button id="update" type="button" class="btn btn-default">수정</button>
@@ -47,20 +47,27 @@
 <script>
   $(document).ready(function () {
     var href = window.location.href;
-    var id = href.replace(/.+(detail\/)/, '');
+    var id = href.replace(/.+(detail)/, '');
     // 기존테이블 데이터 지우고 행을 추가해야한다면 아래 empty() 추가
-    $.ajax({
-      url: 'http://192.168.0.2:8080/api/bbs/' + id,
-      method: 'GET',
-      success: function (data) {
-        console.log(data);
-        $("#titleText").val(data.title);
-        $("#content").val(data.content);
-        $("#writer").val(data.insterId);
-        $("#bbsId").val(data.id);
+    
+    if (id == '') {
+      $('#writer').attr('readonly', false);
+    } else {
+      id = id.replace("\/", "");
+      $.ajax({
+        url: 'http://192.168.0.2:8080/api/bbs/' + id,
+        method: 'GET',
+        success: function (data) {
+          console.log(data);
+          $("#titleText").val(data.title);
+          $("#content").val(data.content);
+          $("#writer").val(data.insterId);
+          $("#bbsId").val(data.id);
 
-      }
-    });
+        }
+      });
+    }
+
   });
 
   $('#register').on("click", function () {
@@ -77,7 +84,7 @@
       contentType: "application/json; charset=utf-8",
       success: function (data) {
         console.log(data);
-
+        location.href = "/";
       }
     });
   });
@@ -90,28 +97,32 @@
     for (var i = 0; i < formSerializeArray.length; i++) {
       object[formSerializeArray[i]['name']] = formSerializeArray[i]['value'];
     }
-    var id = $('#bbsId').val();
+
+    var id = $("#bbsId").val();
+
     $.ajax({
       url: 'http://192.168.0.2:8080/api/bbs/' + id,
       data: JSON.stringify(object),
       method: 'PUT',
+      contentType: "application/json; charset=utf-8",
       success: function (data) {
         console.log(data);
-
+        location.href = "/";
       }
     });
   });
 
   $('#delete').on("click", function () {
+
+    var id = $("#bbsId").val();
+
     $.ajax({
       url: 'http://192.168.0.2:8080/api/bbs/' + id,
       method: 'DELETE',
+      contentType: "application/json; charset=utf-8",
       success: function (data) {
         console.log(data);
-        $("#titleText").val(data.title);
-        $("#content").append(data.content);
-        $("#writer").val(data.insterId);
-
+        location.href = "/";
       }
     });
   });

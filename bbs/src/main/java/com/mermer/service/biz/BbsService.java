@@ -31,7 +31,12 @@ public class BbsService {
 
 
 	public ResponseEntity selectOneBbs(Long id) {
+		
 		Bbs bbs = bbsRepository.findById(id).get();
+		
+		bbs.updateReadCnt();
+		
+		bbsRepository.save(bbs);
 		
 		return ResponseEntity.ok(bbs);
 	}

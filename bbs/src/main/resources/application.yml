@@ -23,5 +23,5 @@ jackson:
 
 logging:
   level: 
-    root: info
+    root: debug
 

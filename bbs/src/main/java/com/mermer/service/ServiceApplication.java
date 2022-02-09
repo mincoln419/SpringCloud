@@ -54,7 +54,6 @@ public class ServiceApplication {
 					.content(texts[randInt] + "contents")
 					.insterId(randInt*3)
 					.instDtm(LocalDateTime.of(2022,2, 7, 13, 14, 15))
-					.readCnt(randInt)
 					.build();
 			
 			bbsRepository.save(bbs);

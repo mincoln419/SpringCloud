@@ -35,7 +35,12 @@ public class Bbs {
 	@CreatedDate
 	private LocalDateTime instDtm;
 
-	private Integer readCnt;
+	@Builder.Default
+	private Integer readCnt = 0;
+
+	public void updateReadCnt() {
+		this.readCnt++;
+	}
 	
 	
 }
