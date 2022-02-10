@@ -1,5 +1,5 @@
 server: 
-  port: 9001
+  port: 0
 
 spring: 
   application:
@@ -9,6 +9,6 @@ eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
-    severice-url: 
+    service-url: 
       defaultZone: http://127.0.0.1:8761/eureka
       
