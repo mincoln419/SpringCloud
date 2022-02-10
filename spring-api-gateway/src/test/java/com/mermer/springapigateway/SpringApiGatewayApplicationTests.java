@@ -1,10 +1,10 @@
-package com.mermer.service;
+package com.mermer.springapigateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServiceApplicationTests {
+class SpringApiGatewayApplicationTests {
 
 	@Test
 	void contextLoads() {
