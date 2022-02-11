@@ -22,6 +22,23 @@ http.createServer((req, res) => {
             }
         })
     }else{
-        console.log("잘못된 페이지");
+        if(req.url.indexOf("detail") > 0){  
+            fs.readFile('../' + req.url,  function(err, data){
+                if(err){
+                    throw err;
+                }else{
+                    res.end(data);
+                }
+            })
+        }else{
+            fs.readFile('./' + req.url,  function(err, data){
+                if(err){
+                    throw err;
+                }else{
+                    res.end(data);
+                }
+            });
+        }
+        
     }
 }).listen(3000);
