@@ -2,10 +2,11 @@ import Controller from "./Controller.js";
 import Store from "./store.js";
 import storage from "./storage.js";
 import SearchFormView from "./views/SearchFormView.js";
-import SearchResultView from "./views/SearchResultView.js";
-import TabView from "./views/TabView.js";
+import SearchResultView from "./views/ListView.js";
+import TabView from "./views/PageView.js";
 import KeywordListView from "./views/KeywordListView.js";
 import HistoryListView from "./views/HistoryListView.js";
+import PageView from "./views/PageView.js";
 
 const tag = "[main]";
 
@@ -17,11 +18,10 @@ function main() {
   const store = new Store(storage);
 
   const views = {
-    searchFormView: new SearchFormView(),
-    searchResultView: new SearchResultView(),
-    tabView: new TabView(),
-    keywordListView: new KeywordListView(),
-    historyListView: new HistoryListView(),
+    pageView: new PageView(),
+    listView: new ListView(),
+    detailView: new DetailView(),
+    buttonView: new ButtonView(),
   };
 
   new Controller(store, views);

@@ -22,23 +22,13 @@ http.createServer((req, res) => {
             }
         })
     }else{
-        if(req.url.indexOf("detail") > 0){  
-            fs.readFile('../' + req.url,  function(err, data){
-                if(err){
-                    throw err;
-                }else{
-                    res.end(data);
-                }
-            })
-        }else{
-            fs.readFile('./' + req.url,  function(err, data){
-                if(err){
-                    throw err;
-                }else{
-                    res.end(data);
-                }
-            });
-        }
+        fs.readFile('./' + req.url,  function(err, data){
+            if(err){
+                throw err;
+            }else{
+                res.end(data);
+            }
+        });
         
     }
 }).listen(3000);
