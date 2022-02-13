@@ -12,15 +12,17 @@ spring:
         uri: http://127.0.0.1:8081/
         predicates:
         - Path=/first-service/**
-        filters:        - AddRequestHeader=first-request, first-request-header2
-        - AddResponseHeader=first-response, first-response-header2 
+        filters:#        - AddRequestHeader=first-request, first-request-header2
+#        - AddResponseHeader=first-response, first-response-header2 
+        - CustomFilter
       - id: second-service
         uri: http://127.0.0.1:8082/
         predicates:
         - Path=/second-service/**
         filters:
-        - AddRequestHeader=second-request, second-request-header2
-        - AddResponseHeader=second-response, second-response-header2
+#        - AddRequestHeader=second-request, second-request-header2
+#        - AddResponseHeader=second-response, second-response-header2
+         - CustomFilter
     
 eureka:
   client:
