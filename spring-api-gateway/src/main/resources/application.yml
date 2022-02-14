@@ -7,8 +7,10 @@ spring:
     
   cloud:
     gateway:
-      default-filters:      - name: GlobalFilter 
-        args:          baseMessage: Spring Cloud Gateway Global Filter
+      default-filters: 
+      - name: GlobalFilter 
+        args: 
+          baseMessage: Spring Cloud Gateway Global Filter
           preLogger: true
           postLogger: true
       routes:
@@ -16,9 +18,9 @@ spring:
         uri: lb://MY-FIRST-SERVICE
         predicates:
         - Path=/first-service/**
-        filters:#        - AddRequestHeader=first-request, first-request-header2
-#        - AddResponseHeader=first-response, first-response-header2 
-        - CustomFilter
+        filters:
+#        - AddRequestHeader=first-request, first-request-header2
+#        - AddResponseHeader=first-response, first-response-header2        - CustomFilter
       - id: second-service
         uri: lb://MY-SECOND-SERVICE
         predicates:
