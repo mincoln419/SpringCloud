@@ -1,0 +1,27 @@
+server:
+  port: 0
+  
+spring:
+  application:
+    name: user-service
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+            
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.vlaue}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+      
+      
+greeting:
+  message: Welcom to the Simple E-commerce
+
+      
+      

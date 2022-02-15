@@ -1,4 +1,4 @@
-package com.mermer.springapigateway.config;
+package com.mermer.springapigateway.filter;
 
 
 
