@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.mermer.userservice.dto.UserDto;
@@ -18,7 +20,7 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository; 
 	
 	@Override
-	public UserDto createUser(UserDto userDto) {
+	public ResponseEntity createUser(UserDto userDto) {
 		
 		userDto.setUserId(UUID.randomUUID().toString());
 		
@@ -29,8 +31,7 @@ public class UserServiceImpl implements UserService {
 		userEntity.setEncryptedPwd("encrypted_password");
 		
 		userRepository.save(userEntity);
-		
-		return null;
+		return new ResponseEntity(HttpStatus.CREATED);
 	}
 
 }
