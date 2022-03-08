@@ -16,6 +16,7 @@ import com.mermer.userservice.dto.UserDto;
 import com.mermer.userservice.entity.UserEntity;
 import com.mermer.userservice.service.UserService;
 import com.mermer.userservice.vo.Greeting;
+import com.mermer.userservice.vo.ResponseUser;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,13 +51,14 @@ public class UserController {
 	}
 	
 	@PostMapping("/users")
-	public ResponseEntity createUser(@RequestBody UserEntity user) {
+	public ResponseEntity createUser(@RequestBody UserDto userDto) {
 	
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-		UserDto userDto = mapper.map(user, UserDto.class);
 		userService.createUser(userDto);
-		return new ResponseEntity(HttpStatus.CREATED);
+		ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
 	}
 }
