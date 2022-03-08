@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@RequestMapping("/user-service/")
+@RequestMapping("/user-service")
 public class UserController {
 
 	private Environment env;
