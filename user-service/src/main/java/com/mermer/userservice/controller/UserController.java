@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/user-service")
 public class UserController {
 
 	private Environment env;
@@ -41,7 +41,7 @@ public class UserController {
 	
 	@GetMapping("/health_check")
 	public String status() {
-		return "It's working in User Service";
+		return String.format("It's working in User Service on Port %s", env.getProperty("local.server.port"));
 	}
 	
 	@GetMapping("/welcome")
@@ -51,12 +51,11 @@ public class UserController {
 	}
 	
 	@PostMapping("/users")
-	public ResponseEntity createUser(@RequestBody UserEntity user) {
+	public ResponseEntity createUser(@RequestBody UserDto userDto) {
 	
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-		UserDto userDto = mapper.map(user, UserDto.class);
 		userService.createUser(userDto);
 		ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
 		
