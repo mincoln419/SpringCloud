@@ -1,5 +1,6 @@
 package com.mermer.userservice.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.mermer.userservice.dto.UserDto;
 import com.mermer.userservice.entity.UserEntity;
 import com.mermer.userservice.repository.UserRepository;
+import com.mermer.userservice.vo.ResponseUser;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,4 +45,10 @@ public class UserServiceImpl implements UserService {
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
 
+	@Override
+	public Iterable<UserEntity> getUserByAll() {
+		return userRepository.findAll();
+	}
+
+	
 }

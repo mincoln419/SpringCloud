@@ -1,5 +1,8 @@
 package com.mermer.userservice.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +63,19 @@ public class UserController {
 		ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
+	}
+	
+	@GetMapping("/users")
+	public ResponseEntity<List<ResponseUser>> getUsers(){
+		
+		Iterable<UserEntity> userList = userService.getUserByAll();
+		
+		List<ResponseUser> result = new ArrayList<>();
+		
+		userList.forEach(v -> {
+			result.add(new ModelMapper().map(v, ResponseUser.class));
+		});
+		
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 }
