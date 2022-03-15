@@ -1,13 +1,13 @@
-package com.mermer.firstservice;
+package com.mermer.catalog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FirstServiceApplication {
+public class CatalogServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FirstServiceApplication.class, args);
+		SpringApplication.run(CatalogServiceApplication.class, args);
 	}
 
 }
