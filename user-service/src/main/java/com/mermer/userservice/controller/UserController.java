@@ -78,4 +78,10 @@ public class UserController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
+	@PostMapping("/login")
+	public ResponseEntity<ResponseUser> login(){
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+	}
 }

@@ -6,4 +6,6 @@ import com.mermer.userservice.entity.UserEntity;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long>{
 
+	UserEntity findByEmail(String username);
+
 }
