@@ -24,5 +24,12 @@ eureka:
 greeting:
   message: Welcom to the Simple E-commerce
 
-      
+logging:
+  level:
+    '[com.mermer.userservice]': debug
+
+#5분짜리 토큰    
+token:
+  expiration_time: 300000 
+  secret: user-token
       
