@@ -11,11 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mermer.userservice.vo.RequestLogin;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 	
 	
@@ -27,11 +31,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 		try {
 			RequestLogin creds = new ObjectMapper().readValue(request.getInputStream(), RequestLogin.class);
 			return getAuthenticationManager()
-					.authenticate(new UsernamePasswordAuthenticationToken(
-							creds.getEmail()
-							, creds.getPassword()
-							, new ArrayList<>())
-							);
+					.authenticate(new UsernamePasswordAuthenticationToken
+							(
+							 creds.getEmail(),
+							 creds.getPassword(),
+							 new ArrayList<>()
+							)
+					);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -43,8 +49,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 			FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		
-		//TODO
-		//super.successfulAuthentication(request, response, chain, authResult);
+		log.debug(((User) authResult.getPrincipal()).getUsername());
 	}
 	
 }
