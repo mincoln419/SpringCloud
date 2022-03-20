@@ -11,9 +11,11 @@ import com.mermer.userservice.vo.ResponseUser;
 
 public interface UserService extends UserDetailsService{
 
-	ResponseEntity createUser(UserDto userDto);
+	UserDto createUser(UserDto userDto);
 
 	Iterable<UserEntity> getUserByAll();
+
+	UserDto getUserById(String userId);
 
 	
 	

@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public ResponseEntity createUser(UserDto userDto) {
+	public UserDto createUser(UserDto userDto) {
 		
 		userDto.setUserId(UUID.randomUUID().toString());
 		
@@ -45,13 +45,23 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = mapper.map(userDto, UserEntity.class);
 		userEntity.setEncryptedPwd(passwordEncoder.encode(userDto.getPwd()));
 		
-		userRepository.save(userEntity);
-		return new ResponseEntity(HttpStatus.CREATED);
+		UserEntity newUser = userRepository.save(userEntity);
+		
+		return mapper.map(newUser, UserDto.class);
 	}
 
 	@Override
 	public Iterable<UserEntity> getUserByAll() {
 		return userRepository.findAll();
+	}
+	
+	
+	@Override
+	public UserDto getUserById(String userId) {
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		UserEntity userEntity = userRepository.findAllByUserId(userId);
+		return mapper.map(userEntity, UserDto.class);
 	}
 
 	@Override
@@ -61,8 +71,11 @@ public class UserServiceImpl implements UserService {
 		
 		if(userEntity == null)throw new UsernameNotFoundException(username);
 		
+		// list에는 권한에 관련된 값이 세팅된다.
 		return new User(userEntity.getEmail(), userEntity.getEncryptedPwd(), true, true, true, true, new ArrayList<>());
 	}
+
+
 
 	
 }
