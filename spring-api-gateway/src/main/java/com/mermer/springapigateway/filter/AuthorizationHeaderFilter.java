@@ -22,16 +22,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 	Environment env;
 	
 	public AuthorizationHeaderFilter(Environment env) {
+		super(Config.class);
 		this.env = env;
 	}
 	
 	public static class Config{
 
-		public boolean isPostLogger() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
+		//TODO
 	}
 	
 	//login -> token -> users(with token) -> header(include token)
