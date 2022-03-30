@@ -19,4 +19,9 @@ spring:
         git:
           uri: https://github.com/mincoln419/spring-cloud-config
 #          uri: file:\\\C:\SpringCloud\config-repo
-        
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace, busrefresh
