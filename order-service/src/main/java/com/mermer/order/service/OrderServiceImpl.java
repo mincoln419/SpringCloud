@@ -17,9 +17,12 @@ public class OrderServiceImpl implements OrderService{
 
 	private OrderRepository orderRepository;
 	
+	private ModelMapper modelMapper;
+	
 	@Autowired
-	public OrderServiceImpl(OrderRepository orderRepository) {
+	public OrderServiceImpl(OrderRepository orderRepository,  ModelMapper modelMapper) {
 		this.orderRepository = orderRepository;
+		this.modelMapper = modelMapper;
 	}
 	
 	@Override
@@ -27,12 +30,11 @@ public class OrderServiceImpl implements OrderService{
 		orderDto.setOrderId(UUID.randomUUID().toString());
 		orderDto.setTotalPrice(orderDto.getQty() * orderDto.getUnitPrice());
 		
-		ModelMapper mapper = new ModelMapper();
-		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		OrderEntity orderEntity = mapper.map(orderDto, OrderEntity.class);
+
+		OrderEntity orderEntity = modelMapper.map(orderDto, OrderEntity.class);
 		
 		OrderEntity newOrder = orderRepository.save(orderEntity);
-		OrderDto returnValue = mapper.map(newOrder, OrderDto.class);
+		OrderDto returnValue = modelMapper.map(newOrder, OrderDto.class);
 		
 		return returnValue;
 	}
@@ -40,9 +42,8 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public OrderDto getOrderByOrderId(String orderId) {
 		OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
-		ModelMapper mapper = new ModelMapper();
-		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		OrderDto returnValue = mapper.map(orderEntity, OrderDto.class);
+		
+		OrderDto returnValue = modelMapper.map(orderEntity, OrderDto.class);
 		return returnValue;
 	}
 

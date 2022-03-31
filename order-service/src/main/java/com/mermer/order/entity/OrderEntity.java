@@ -1,5 +1,6 @@
 package com.mermer.order.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "orders")
-public class OrderEntity {
+public class OrderEntity implements Serializable {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,4 +39,5 @@ public class OrderEntity {
 	@Column(nullable = false, updatable = false, insertable = true)
 	@ColumnDefault(value = "CURRENT_TIMESTAMP")
 	private LocalDateTime createdAt;
+
 }
