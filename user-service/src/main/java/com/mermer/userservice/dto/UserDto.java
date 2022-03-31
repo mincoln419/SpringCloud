@@ -1,6 +1,9 @@
 package com.mermer.userservice.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.mermer.userservice.vo.ResponseOrder;
 
 import lombok.Data;
 
@@ -17,7 +20,7 @@ public class UserDto {
 	
 	private LocalDateTime createdAt;
 	
-	
+	private List<ResponseOrder> orders;
 	
 	private String ecncryptedPwd;
 	
