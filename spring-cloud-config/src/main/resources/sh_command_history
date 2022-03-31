@@ -1,0 +1,13 @@
+
+#keystore 생성
+keytool -genkeypair -alias apiEncryptionKey -keyalg RSA          -dname "CN=Mincoln Cho, OU=IdeaTec, O=mermer.co.kr, L=Seoul, C=KR"          -keypass "cho561616!" -keystore apiEncryptionKey.jks -storepass "cho561616!"
+
+#keystore entry 확인
+keytool -list -keystore apiEncryptionKey.jks -v
+
+#keystore export
+keytool -export -alias apiEncryptionKey -keystore apiEncryptionKey.jks -rfc -file trustServer.cer
+
+#keystore import
+keytool -import -alias trustServer -file trustServer.cer -keystore publicKey.jks
+history

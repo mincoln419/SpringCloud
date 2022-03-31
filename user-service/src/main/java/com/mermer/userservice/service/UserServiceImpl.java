@@ -7,6 +7,9 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -14,10 +17,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.mermer.userservice.dto.UserDto;
 import com.mermer.userservice.entity.UserEntity;
 import com.mermer.userservice.repository.UserRepository;
+import com.mermer.userservice.vo.ResponseOrder;
 import com.mermer.userservice.vo.ResponseUser;
 
 @Service
@@ -28,10 +33,20 @@ public class UserServiceImpl implements UserService {
 	
 	BCryptPasswordEncoder passwordEncoder;
 	
+	RestTemplate restTemplate;
+	
+	Environment env;
+	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {	
+	public UserServiceImpl(UserRepository userRepository, 
+			BCryptPasswordEncoder passwordEncoder,
+			RestTemplate restTemplate,
+			Environment env
+			) {	
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.restTemplate = restTemplate;
+		this.env = env;
 	}
 	
 	@Override
@@ -61,7 +76,22 @@ public class UserServiceImpl implements UserService {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		UserEntity userEntity = userRepository.findAllByUserId(userId);
-		return mapper.map(userEntity, UserDto.class);
+		
+		//List<ResponseOrder> orders = new ArrayList();
+		UserDto userDto = mapper.map(userEntity, UserDto.class);
+		
+		String orderUrl = String.format(env.getProperty("order-service.url"), userId);
+		
+		ResponseEntity<List<ResponseOrder>> orderResponse = 
+				restTemplate.exchange(orderUrl, HttpMethod.GET, null, 
+						new ParameterizedTypeReference<List<ResponseOrder>>() {
+						});
+		
+		List<ResponseOrder> orderList = orderResponse.getBody();
+		
+		userDto.setOrders(orderList);
+		
+		return userDto;
 	}
 
 	@Override
