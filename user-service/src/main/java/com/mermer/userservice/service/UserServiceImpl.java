@@ -80,14 +80,18 @@ public class UserServiceImpl implements UserService {
 		//List<ResponseOrder> orders = new ArrayList();
 		UserDto userDto = mapper.map(userEntity, UserDto.class);
 		
+		/* using a rest-template */
 		String orderUrl = String.format(env.getProperty("order-service.url"), userId);
 		
 		ResponseEntity<List<ResponseOrder>> orderResponse = 
 				restTemplate.exchange(orderUrl, HttpMethod.GET, null, 
 						new ParameterizedTypeReference<List<ResponseOrder>>() {
 						});
-		
 		List<ResponseOrder> orderList = orderResponse.getBody();
+		
+		/* using Feign Client */
+		//TODO 
+		
 		
 		userDto.setOrders(orderList);
 		
