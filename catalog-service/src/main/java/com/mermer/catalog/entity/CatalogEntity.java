@@ -2,6 +2,7 @@ package com.mermer.catalog.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,5 +33,5 @@ public class CatalogEntity implements Serializable {
 	
 	@Column(nullable = false, updatable = false, insertable = true)
 	@ColumnDefault(value = "CURRENT_TIMESTAMP")
-	private LocalDateTime createdAt;
+	private Date createdAt;
 }
