@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.mermer.userservice.client.OrderServiceClient;
 import com.mermer.userservice.dto.UserDto;
 import com.mermer.userservice.entity.UserEntity;
 import com.mermer.userservice.repository.UserRepository;
@@ -37,16 +38,20 @@ public class UserServiceImpl implements UserService {
 	
 	Environment env;
 	
+	OrderServiceClient client;
+	
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, 
 			BCryptPasswordEncoder passwordEncoder,
 			RestTemplate restTemplate,
-			Environment env
+			Environment env,
+			OrderServiceClient client
 			) {	
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.restTemplate = restTemplate;
 		this.env = env;
+		this.client = client;
 	}
 	
 	@Override
@@ -81,17 +86,17 @@ public class UserServiceImpl implements UserService {
 		UserDto userDto = mapper.map(userEntity, UserDto.class);
 		
 		/* using a rest-template */
-		String orderUrl = String.format(env.getProperty("order-service.url"), userId);
-		
-		ResponseEntity<List<ResponseOrder>> orderResponse = 
-				restTemplate.exchange(orderUrl, HttpMethod.GET, null, 
-						new ParameterizedTypeReference<List<ResponseOrder>>() {
-						});
-		List<ResponseOrder> orderList = orderResponse.getBody();
+//		String orderUrl = String.format(env.getProperty("order-service.url"), userId);
+//		
+//		ResponseEntity<List<ResponseOrder>> orderResponse = 
+//				restTemplate.exchange(orderUrl, HttpMethod.GET, null, 
+//						new ParameterizedTypeReference<List<ResponseOrder>>() {
+//						});
+//		List<ResponseOrder> orderList = orderResponse.getBody();
 		
 		/* using Feign Client */
 		//TODO 
-		
+		List<ResponseOrder> orderList = client.getOrders(userId);
 		
 		userDto.setOrders(orderList);
 		
