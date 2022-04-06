@@ -36,7 +36,8 @@ greeting:
 
 logging:
   level:
-    '[com.mermer.userservice]': debug
+    '[com.mermer.userservice.client]': debug
+    
     
 management:
   endpoints:

@@ -26,7 +26,11 @@ import com.mermer.userservice.repository.UserRepository;
 import com.mermer.userservice.vo.ResponseOrder;
 import com.mermer.userservice.vo.ResponseUser;
 
+import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 
@@ -95,8 +99,14 @@ public class UserServiceImpl implements UserService {
 //		List<ResponseOrder> orderList = orderResponse.getBody();
 		
 		/* using Feign Client */
-		//TODO 
-		List<ResponseOrder> orderList = client.getOrders(userId);
+		// Fegin Exception Handling */
+		List<ResponseOrder> orderList = null;
+		
+		try {
+			orderList = client.getOrders(userId);
+		}catch(FeignException e) {
+			log.error(e.getMessage());
+		}
 		
 		userDto.setOrders(orderList);
 		
