@@ -11,6 +11,6 @@ import com.mermer.userservice.vo.ResponseOrder;
 @FeignClient(name = "ORDER-SERVICE")
 public interface OrderServiceClient {
 	
-	@GetMapping("/order-service/{userId}/orders_ng")
+	@GetMapping("/order-service/{userId}/orders")
 	List<ResponseOrder> getOrders(@PathVariable String userId);
 }
