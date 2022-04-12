@@ -95,6 +95,9 @@ for %%i in ("%BASE_DIR%\libs\*") do (
 )
 
 rem Classpath addition for core
+if exist %BASE_DIR%\share\java\kafka\* (
+	call:concat %BASE_DIR%\share\java\kafka\*
+)
 for %%i in ("%BASE_DIR%\core\build\libs\kafka_%SCALA_BINARY_VERSION%*.jar") do (
 	call :concat "%%i"
 )
