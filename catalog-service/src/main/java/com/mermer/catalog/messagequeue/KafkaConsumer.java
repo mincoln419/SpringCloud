@@ -1,4 +1,4 @@
-package messagequeue;
+package com.mermer.catalog.messagequeue;
 
 import java.util.HashMap;
 import java.util.Map;
