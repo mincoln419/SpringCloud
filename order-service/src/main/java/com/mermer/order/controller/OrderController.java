@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mermer.order.dto.OrderDto;
 import com.mermer.order.entity.OrderEntity;
+import com.mermer.order.messagequeue.KafkaProducer;
 import com.mermer.order.service.OrderService;
 import com.mermer.order.vo.RequestOrder;
 import com.mermer.order.vo.ResponseOrder;
@@ -26,15 +26,21 @@ import com.mermer.order.vo.ResponseOrder;
 @RequestMapping("/order-service")
 public class OrderController {
 
-	@Autowired
 	private Environment env;
 	
-	@Autowired
 	private OrderService orderService;
 	
-	@Autowired
 	private ModelMapper modelMapper;
 	
+	private KafkaProducer kafkaProducer;
+	
+	@Autowired
+	public OrderController(Environment env, OrderService orderService, ModelMapper modelMapper, KafkaProducer kafkaProducer ) {
+		this.env = env;
+		this.orderService = orderService;
+		this.modelMapper = modelMapper;
+		this.kafkaProducer = kafkaProducer;
+	}
 
 	@GetMapping("/health_check")
 	public String status() {
@@ -47,11 +53,16 @@ public class OrderController {
 			@PathVariable("userId") String userId,
 			@RequestBody RequestOrder requestOrder){
 		
+		/* jpa */
 		OrderDto orderDto = modelMapper.map(requestOrder, OrderDto.class);
 		orderDto.setUserId(userId);
 		OrderDto createOrderDto = orderService.createOrder(orderDto);
 		
 		ResponseOrder responseOrder = modelMapper.map(createOrderDto, ResponseOrder.class);
+		
+		/* send this order to the kafka*/
+		kafkaProducer.send("example-catalog-topic", orderDto);
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
 	}
 	
