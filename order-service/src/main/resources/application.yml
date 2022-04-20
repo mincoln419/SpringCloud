@@ -11,14 +11,21 @@ spring:
         web-allow-others: true
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     generate-ddl: true
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: 
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password: 
+   url: jdbc:mariadb://localhost:3306/mydb
+   driver-class-name: org.mariadb.jdbc.Driver
+   username: root
+   password: pass 
+   
+    
+    
   sql:
     init:
       mode: never
