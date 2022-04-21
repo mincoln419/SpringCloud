@@ -7,11 +7,9 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,9 +22,7 @@ import com.mermer.userservice.dto.UserDto;
 import com.mermer.userservice.entity.UserEntity;
 import com.mermer.userservice.repository.UserRepository;
 import com.mermer.userservice.vo.ResponseOrder;
-import com.mermer.userservice.vo.ResponseUser;
 
-import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -44,18 +40,23 @@ public class UserServiceImpl implements UserService {
 	
 	OrderServiceClient client;
 	
+	CircuitBreakerFactory circuitBreakerFactory;
+	
+	
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, 
 			BCryptPasswordEncoder passwordEncoder,
 			RestTemplate restTemplate,
 			Environment env,
-			OrderServiceClient client
+			OrderServiceClient client,
+			CircuitBreakerFactory circuitBreakerFactory
 			) {	
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.restTemplate = restTemplate;
 		this.env = env;
 		this.client = client;
+		this.circuitBreakerFactory = circuitBreakerFactory;
 	}
 	
 	@Override
@@ -109,7 +110,13 @@ public class UserServiceImpl implements UserService {
 //		}
 		
 		/* ErrorDecoder */
-		List<ResponseOrder> orderList = client.getOrders(userId);
+		//List<ResponseOrder> orderList = client.getOrders(userId);
+		
+		/* circuitbreaker 사용한 예외 처리 */
+		CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
+		List<ResponseOrder> orderList  = circuitBreaker.run(() -> client.getOrders(userId)
+				, throwable -> new ArrayList<>());
+		
 		userDto.setOrders(orderList);
 		
 		return userDto;
