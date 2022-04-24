@@ -24,8 +24,11 @@ import com.mermer.order.service.OrderService;
 import com.mermer.order.vo.RequestOrder;
 import com.mermer.order.vo.ResponseOrder;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/order-service")
+@Slf4j
 public class OrderController {
 
 	private Environment env;
@@ -63,7 +66,7 @@ public class OrderController {
 			@PathVariable("userId") String userId,
 			@RequestBody RequestOrder requestOrder){
 		
-		
+		log.info("Before add order data");
 		OrderDto orderDto = modelMapper.map(requestOrder, OrderDto.class);
 		orderDto.setUserId(userId);
 		/* jpa */
@@ -81,12 +84,13 @@ public class OrderController {
 		
 //		ResponseOrder responseOrder = modelMapper.map(orderDto, ResponseOrder.class);
 		
+		log.info("After added order data");
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
 	}
 	
 	@GetMapping("/{userId}/orders")
-	public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId){
-
+	public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception{
+		log.info("Before retrieve order data");
 		Iterable<OrderEntity> orderList = orderService.getOrderByUserId(userId);
 		
 		List<ResponseOrder> result = new ArrayList<>();
@@ -94,6 +98,14 @@ public class OrderController {
 			result.add(modelMapper.map(v, ResponseOrder.class));
 		});
 		
+		try {
+			Thread.sleep(1000);
+			throw new Exception("장애 발생");
+		}catch(InterruptedException e) {
+			log.error(e.getMessage());
+		}
+		
+		log.info("After retrieved order data");
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
