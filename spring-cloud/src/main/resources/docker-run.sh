@@ -26,8 +26,33 @@ docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 ecommerce-netw
 docker network inspect ecommerce-network
 
 
-
 docker run -d --name rabbitmq --network ecommerce-network \
  -p 15672:15672 -p 5672:5672 -p 15671:15671 -p 5671:5671 -p 4369:4369 \
  -e RABBITMQ_DEFAULT_USER=guest \
  -e RABBITMQ_DEFAULT_PASS=guest rabbitmq:management
+ 
+docker run -d -p 8888:8888 --network ecommerce-network \
+ -e "spring.rabbitmq.host=rabbitmq" \
+ -e "spring.profiles.active=default" \
+  --name config-service mincoln419/config-service:1.0
+
+docker build --tag mincoln419/spring-cloud:1.0
+
+docker push mincoln419/spring-cloud:1.0
+
+
+docker run -d -p 8761:8761 --network ecommerce-network \
+ -e "spring.cloud.config.uri=http://config-service:8888" \
+ --name discovery-service mincoln419/spring-cloud:1.0
+ 
+ 
+ 
+ docker run -d -p 8000:8000 --network ecommerce-network \
+ -e "spring.cloud.config.uri=http://config-service:8888" \
+ -e "spring.rabbitmq.host=rabbitmq" \
+ -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
+ --name apigateway-service \
+
+ mincoln419/api-gate-way:1.0
+ 
+ 
