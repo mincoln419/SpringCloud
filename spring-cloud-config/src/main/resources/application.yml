@@ -18,6 +18,8 @@ spring:
           search-locations: file:\\\${user.home}\native-repo
         git:
           uri: https://github.com/mincoln419/spring-cloud-config
+          #username:[mincoln419]
+          #password:[]
 #          uri: file:\\\C:\SpringCloud\config-repo
 
 management:
