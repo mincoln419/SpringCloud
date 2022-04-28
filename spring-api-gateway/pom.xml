@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.mermer</groupId>
 	<artifactId>spring-api-gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>spring-api-gateway</name>
 	<description>spring-api-gateway server</description>
 	<properties>
