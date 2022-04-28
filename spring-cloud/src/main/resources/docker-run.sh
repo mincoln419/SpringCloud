@@ -56,3 +56,5 @@ docker run -d -p 8761:8761 --network ecommerce-network \
  mincoln419/api-gate-way:1.0
  
  
+ docker run -d -p 3306:3306  --network ecommerce-network --name mariadb edowon0623/my-mariadb:1.0
+ 
