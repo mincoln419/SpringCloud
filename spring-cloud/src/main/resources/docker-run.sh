@@ -34,7 +34,7 @@ docker run -d --name rabbitmq --network ecommerce-network \
 docker run -d -p 8888:8888 --network ecommerce-network \
  -e "spring.rabbitmq.host=rabbitmq" \
  -e "spring.profiles.active=default" \
-  --name config-service mincoln419/config-service:1.0
+  --name config-service mincoln419/spring-cloud-config:1.0
 
 docker build --tag mincoln419/spring-cloud:1.0
 
@@ -52,7 +52,11 @@ docker run -d -p 8761:8761 --network ecommerce-network \
  -e "spring.rabbitmq.host=rabbitmq" \
  -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
  --name apigateway-service \
-
  mincoln419/api-gate-way:1.0
  
- 
+FROM mariadb
+ENV MYSQL_ROOT_PASSWORD pass
+ENV MYSQL_DATABASE mydb
+COPY ./mysql_data/mysql /var/lib/mysql
+EXPOSE 3306
+ENTRYPOINT ["mysqld", "--user=root"]
