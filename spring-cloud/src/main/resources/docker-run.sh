@@ -63,3 +63,17 @@ ENTRYPOINT ["mysqld", "--user=root"]
 
 
 docker-compose -f docker-compose-single-broker.yml up -d
+
+
+#Prometheus
+docker run -d -p 9090:9090 \
+ --network ecommerce-network \
+ --name prometheus \
+ -v /C/Users/minco/prometheus/prometheus-2.35.0.windows-amd64/prometheus.yml:/etc/prometheus/prometheus.yml \
+ prom/prometheus 
+
+#Grafana
+docker run -d -p 3000:3000 \
+ --network ecommerce-network \
+ --name grafana \
+ grafana/grafana 
