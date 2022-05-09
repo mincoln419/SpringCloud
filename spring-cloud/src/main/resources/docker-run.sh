@@ -51,7 +51,7 @@ docker run -d -p 8761:8761 --network ecommerce-network \
  -e "spring.cloud.config.uri=http://config-service:8888" \
  -e "spring.rabbitmq.host=rabbitmq" \
  -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
- --name apigateway-service \
+ --name api-gateway-service \
  mincoln419/api-gate-way:1.0
  
 FROM mariadb
@@ -77,3 +77,24 @@ docker run -d -p 3000:3000 \
  --network ecommerce-network \
  --name grafana \
  grafana/grafana 
+ 
+ 
+ 
+ 
+ docker run -d --network ecommerce-network \
+  --name user-service \
+ -e "spring.cloud.config.uri=http://config-service:8888" \
+ -e "spring.rabbitmq.host=rabbitmq" \
+ -e "spring.zipkin.base-url=http://zipkin:9411" \
+ -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
+ -e "logging.file=/api-logs/users-ws.log" \
+ mincoln419/user-service:1.0
+ 
+ 
+ docker run -d --network ecommerce-network \
+  --name order-service \
+ -e "spring.zipkin.base-url=http://zipkin:9411" \
+ -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
+ -e "spring.datasource.url=jdbc:mariadb://mariadb:3306/mydb" \
+ -e "logging.file=/api-logs/orders-ws.log" \
+ mincoln419/order-service
