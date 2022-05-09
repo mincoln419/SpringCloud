@@ -8,10 +8,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mermer</groupId>
-	<artifactId>spring-api-gateway</artifactId>
+	<artifactId>apigateway-service</artifactId>
 	<version>1.0</version>
-	<name>spring-api-gateway</name>
-	<description>spring-api-gateway server</description>
+	<name>apigateway-service</name>
+	<description>apigateway server</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.0</spring-cloud.version>

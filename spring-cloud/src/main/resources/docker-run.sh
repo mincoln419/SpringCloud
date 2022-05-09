@@ -47,12 +47,12 @@ docker run -d -p 8761:8761 --network ecommerce-network \
  
  
  
- docker run -d -p 8000:8000 --network ecommerce-network \
+docker run -d -p 8000:8000 --network ecommerce-network \
  -e "spring.cloud.config.uri=http://config-service:8888" \
  -e "spring.rabbitmq.host=rabbitmq" \
  -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
- --name api-gateway-service \
- mincoln419/api-gate-way:1.0
+ --name apigateway-service \
+mincoln419/apigateway-service:1.0
  
 FROM mariadb
 ENV MYSQL_ROOT_PASSWORD pass
@@ -97,4 +97,12 @@ docker run -d -p 3000:3000 \
  -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
  -e "spring.datasource.url=jdbc:mariadb://mariadb:3306/mydb" \
  -e "logging.file=/api-logs/orders-ws.log" \
- mincoln419/order-service
+ mincoln419/order-service:1.0
+
+ 
+ docker run -d --network ecommerce-network \
+  --name catalog-service \
+ -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
+ -e "logging.file=/api-logs/catalogs-ws.log" \
+ mincoln419/catalog-service:1.0
+ 
