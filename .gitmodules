@@ -1,0 +1,2 @@
+[submodule "config-repo"]
+	url = https://github.com/mincoln419/spring-cloud-config.git
